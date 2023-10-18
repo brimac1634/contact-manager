@@ -1,4 +1,7 @@
+using ContactManagerApi.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace ContactManagerApi.Extensions;
 
@@ -28,5 +31,31 @@ public static class ServicesExtensions
                                                             new HeaderApiVersionReader("x-api-version"),
                                                             new MediaTypeApiVersionReader("x-api-version"));
         });
+    }
+
+    public static void ConfigureApiVersionExplorer(this IServiceCollection services) 
+    {
+        services.AddVersionedApiExplorer(setup =>
+        {
+            setup.GroupNameFormat = "'v'VVV";
+            setup.SubstituteApiVersionInUrl = true;
+        });
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services) 
+    {
+        services.AddSwaggerGen(options => {
+            // options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            // {
+            //     Description = "Standard Authorization header using Bearer scheme (\"Bearer {token}\")",
+            //     In = ParameterLocation.Header,
+            //     Name = "Authorization",
+            //     Type = SecuritySchemeType.ApiKey
+            // });
+
+            // options.OperationFilter<SecurityRequirementsOperationFilter>();
+        });
+
+        services.ConfigureOptions<ConfigureSwaggerOptions>();
     }
 }
