@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  contact-manager-app:
+    container_name: contact-manager-app
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - contact-manager-api
+
+  contact-manager-api:
+    container_name: contact-manager-api
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - contact-manager-db
+
+  contact-manager-db:
+    container_name: contact-manager-db
+    image: postgres:10.5
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      # - POSTGRES_DB=${DB_NAME}
+    volumes: 
+      - ./Data:/var/lib/postgresql/data
