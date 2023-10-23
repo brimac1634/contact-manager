@@ -1,18 +1,13 @@
-using ContactManagerApi.Extensions;
+using ContactManagerApi.Infrastructure;
 
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.ConfigureApiVersioning();
+    builder.Services.AddInfrastructure();
     builder.Services.AddControllers();
-    // builder.Services.AddDbContext<ContactManagerDbContext>();
     builder.Services.AddHttpContextAccessor();
-
-    builder.Services.ConfigureCors();
-    builder.Services.ConfigureApiVersionExplorer();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.ConfigureSwagger();
 }
 
 
@@ -37,7 +32,7 @@ var app = builder.Build();
         app.UseHttpsRedirection();
     }
 
-    app.UseCors(ServicesExtensions.CorsPolicy);
+    app.UseCors(InfrastructureDependencyInjection.CorsPolicy);
     app.UseAuthorization();
     app.MapControllers();
 
