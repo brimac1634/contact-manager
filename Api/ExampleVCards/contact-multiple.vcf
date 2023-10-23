@@ -1,0 +1,34 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iOS 11.0//EN
+N:Abril;Laura;;;
+FN:Laura Abril
+ORG:Kyoto University;
+TITLE:PhD student
+item1.EMAIL;type=INTERNET;type=pref:labril18@gmail.com
+item2.ADR;type=HOME;type=pref:;;;Bogotá;Distrito Especial;;Colombia
+IMPP;X-SERVICE-TYPE=Facebook;type=pref:xmpp:laura.abril.7
+REV:2017-09-22T18:53:36Z
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iOS 16.1.1//EN
+N:Abulfateh;Osama;;;
+FN:Osama Abulfateh
+TEL;type=CELL;type=VOICE;type=pref:+971 50 250 1145
+REV:2023-07-23T10:30:01Z
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iOS 11.0//EN
+N:Addison;Jasohn;;;
+FN:Jasohn Addison
+ORG:Compliance\, LP;
+TITLE:Paralegal
+item1.ADR;type=HOME;type=pref:;;Long Island NY;Old Westbury;New York;;Unite
+ d States
+item2.URL;type=pref:http://www.rapidnyc.com/jaddison
+BDAY;value=date:1988-02-04
+IMPP;X-SERVICE-TYPE=Facebook;type=pref:xmpp:jashon.stonybrook
+REV:2017-09-22T18:53:36Z
+END:VCARD
