@@ -1,14 +1,35 @@
-using ContactManagerApi.Infrastructure;
+using ContactManagerApi.Infrastructure.Persistance.Repositories.Contacts;
+using ContactManagerApi.Persistance;
+
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
-namespace ContactManagerApi.Extensions;
+namespace ContactManagerApi.Infrastructure;
 
-public static class ServicesExtensions
+public static class InfrastructureDependencyInjection
 {
     public const string CorsPolicy = "CorsPolicy";
-    public static void ConfigureCors(this IServiceCollection services)
+
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    {
+        services
+            .ConfigureApiVersioning()
+            .AddPersistance()
+            .ConfigureCors()
+            .ConfigureApiVersionExplorer()
+            .ConfigureSwagger();
+            
+        
+        return services;
+    }
+
+    public static IServiceCollection AddPersistance(this IServiceCollection services)
+    {
+        services.AddDbContext<ContactManagerDbContext>();
+        services.AddScoped<IContactRepository, ContactRepository>();
+        return services;
+    }
+
+    public static IServiceCollection ConfigureCors(this IServiceCollection services)
     {
         services.AddCors(options =>
         {
@@ -18,9 +39,10 @@ public static class ServicesExtensions
                 .AllowAnyHeader()
                 .AllowCredentials());
         });
+        return services;
     }
 
-    public static void ConfigureApiVersioning(this IServiceCollection services)
+    public static IServiceCollection ConfigureApiVersioning(this IServiceCollection services)
     {
         services.AddApiVersioning(opt =>
         {
@@ -31,18 +53,22 @@ public static class ServicesExtensions
                                                             new HeaderApiVersionReader("x-api-version"),
                                                             new MediaTypeApiVersionReader("x-api-version"));
         });
+
+        return services;
     }
 
-    public static void ConfigureApiVersionExplorer(this IServiceCollection services) 
+    public static IServiceCollection ConfigureApiVersionExplorer(this IServiceCollection services) 
     {
         services.AddVersionedApiExplorer(setup =>
         {
             setup.GroupNameFormat = "'v'VVV";
             setup.SubstituteApiVersionInUrl = true;
         });
+
+        return services;
     }
 
-    public static void ConfigureSwagger(this IServiceCollection services) 
+    public static IServiceCollection ConfigureSwagger(this IServiceCollection services) 
     {
         services.AddSwaggerGen(options => {
             // options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -57,5 +83,7 @@ public static class ServicesExtensions
         });
 
         services.ConfigureOptions<ConfigureSwaggerOptions>();
+
+        return services;
     }
 }

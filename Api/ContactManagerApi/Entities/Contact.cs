@@ -18,6 +18,24 @@ public class Contact
     public virtual ICollection<string> Categories { get; private set; }
     public virtual ICollection<string> Tags { get; private set; }
 
+    private Contact(Guid id, string firstName, string lastName, string? email, string? organization, string? websiteUrl, string? notes, DateTime created, DateTime? updated)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email != null ? email.ToLower() : null;
+        Organization = organization;
+        WebsiteUrl = websiteUrl != null ? websiteUrl.ToLower() : null;
+        Notes = notes;
+        Created = created;
+        Updated = updated;
+    }
+
+    public static Contact Create(Guid? id, string firstName, string lastName, string? email, string? organization, string? websiteUrl, string? notes, DateTime created, DateTime? updated)
+    {
+        return new Contact(id ?? Guid.NewGuid(), firstName, lastName, email, organization, websiteUrl, notes, created, updated);
+    }
+
     public string Name
     {
         get => $"{FirstName} {LastName}";
