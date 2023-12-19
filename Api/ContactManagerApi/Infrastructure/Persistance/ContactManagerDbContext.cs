@@ -41,10 +41,6 @@ public class ContactManagerDbContext : DbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        modelBuilder.Entity<Contact>();
-            // .HasMany<Device>(u => u.Devices)
-            // .WithOne(d => d.User)
-            // .HasForeignKey(d => d.UserId)
-            // .OnDelete(DeleteBehavior.Cascade);
+        // modelBuilder.Entity<Contact>();
     }
 }

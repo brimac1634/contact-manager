@@ -5,22 +5,38 @@ using MixERP.Net.VCards.Serializer;
 using MixERP.Net.VCards.Types;
 using MixERP.Net.VCards.Models;
 using System.Text;
+using System.Net;
+using ContactManagerApi.Infrastructure.Persistance.Repositories.Contacts;
+using ContactManagerApi.Services.Contacts;
+using ContactManagerApi.Entities;
+using ContactManagerApi.Contracts.Common;
 
 namespace ContactManagerApi.Controllers;
 
 public class ContactsController : ApiController
 {
-    
-    [HttpGet]
-    [ProducesResponseType(typeof(List<ContactResponse>), 200)]
-    public IActionResult GetContacts()
-    {
-        List<ContactResponse> contacts = new()
-        {
-            new ContactResponse(new Guid(), "John", "Doe", "jon@do.com", "Sug Co.", "web.com", "Some notes", DateTime.Now, null, new List<string>(), new List<string>(), new List<string>(), new List<string>(), new List<string>()),
-        };
+    private readonly IContactsService _contactsService;
 
+    public ContactsController(IContactsService contactsService)
+    {
+        _contactsService = contactsService;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(PaginatedResponse<ContactResponse>), (int)HttpStatusCode.OK)]
+    public IActionResult GetContacts([FromQuery] QueryContactRequest queryContactRequest)
+    {
+        var contacts = _contactsService.GetPaginatedContacts(queryContactRequest);
         return Ok(contacts);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(ContactResponse), (int)HttpStatusCode.Created)]
+    public async Task<ContactResponse> CreateContact([FromBody] CreateContactRequest createContactRequest)
+    {
+        var contact = Contact.From(createContactRequest);
+        await _contactsService.AddContact(contact);
+        return new ContactResponse(contact.Id, contact.FirstName, contact.LastName, contact.Organization, contact.WebsiteUrl, contact.Notes, contact.Created, contact.Updated, contact.Phones.Select(phone => new ContactPhone(phone.PhoneNumber, phone.Type)).ToList(), contact.Emails.Select(email => new ContactEmail(email.EmailAddress, email.Type)).ToList());
     }
     
     [HttpGet("vcard")]

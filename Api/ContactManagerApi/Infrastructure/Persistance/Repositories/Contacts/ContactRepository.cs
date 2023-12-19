@@ -16,9 +16,11 @@ public class ContactRepository : IContactRepository
         _contactManagerDbContext = contactManagerDbContext;
     }
 
-    public Task<Contact?> CreateContactAsync(Contact contact)
+    public async Task<Contact?> CreateContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        _contactManagerDbContext.Contacts.Add(contact);
+        await _contactManagerDbContext.SaveChangesAsync();
+        return contact;
     }
 
     public Task<bool?> DeleteContactAsync(Guid id)
@@ -40,10 +42,10 @@ public class ContactRepository : IContactRepository
     public async Task<PaginatedResponse<Contact>> GetPaginatedContactsAsync(QueryContactRequest queryContactRequest)
     {
         var contacts = await _contactManagerDbContext.Contacts
-            .Where(c => (c.Email != null && c.Email.Contains(queryContactRequest.Search))
+            .Where(c => c.Emails.Any(e => e.EmailAddress.Contains(queryContactRequest.Search))
             || c.Name.Contains(queryContactRequest.Search)
-            || c.Phones.Any(p => p.Contains(queryContactRequest.Search)
-            || c.Categories.Any(c => c.Contains(queryContactRequest.Search))
+            || c.Phones.Any(p => p.PhoneNumber.Contains(queryContactRequest.Search)
+            // || c.Categories.Any(c => c.Contains(queryContactRequest.Search))
             || (c.WebsiteUrl != null && c.WebsiteUrl.Contains(queryContactRequest.Search))
             || (c.Notes != null && c.Notes.Contains(queryContactRequest.Search))))
             .Skip((queryContactRequest.PageNumber - 1) * queryContactRequest.PageSize)

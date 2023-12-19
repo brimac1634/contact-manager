@@ -1,3 +1,4 @@
+using ContactManagerApi.Application;
 using ContactManagerApi.Infrastructure;
 
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddInfrastructure();
+    builder.Services.AddApplication();
     builder.Services.AddControllers();
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddEndpointsApiExplorer();
